@@ -23,7 +23,7 @@ func NewFromEnvironment() (*Handler, error) {
 
 		apiKey: os.Getenv("OPENAI_API_KEY"),
 
-		defaultModel: "gpt-4o-realtime-preview",
+		defaultModel: "gpt-realtime",
 	}
 
 	if handler.baseURL == "" {
@@ -61,14 +61,11 @@ func (h *Handler) Dial(r *http.Request) (*websocket.Conn, *http.Response, error)
 
 	headers := http.Header{}
 
-	subprotocols := []string{
-		"realtime",
-		"openai-insecure-api-key." + h.apiKey,
-		"openai-beta.realtime-v1",
-	}
-
 	dialer := websocket.Dialer{
-		Subprotocols: subprotocols,
+		Subprotocols: []string{
+			"realtime",
+			"openai-insecure-api-key." + h.apiKey,
+		},
 	}
 
 	return dialer.Dial(u.String(), headers)

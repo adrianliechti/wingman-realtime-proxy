@@ -85,13 +85,10 @@ func (h *Handler) Dial(r *http.Request) (*websocket.Conn, *http.Response, error)
 
 	headers := http.Header{}
 
-	subprotocols := []string{
-		"realtime",
-		"openai-beta.realtime-v1",
-	}
-
 	dialer := websocket.Dialer{
-		Subprotocols: subprotocols,
+		Subprotocols: []string{
+			"realtime",
+		},
 	}
 
 	return dialer.Dial(u.String(), headers)
